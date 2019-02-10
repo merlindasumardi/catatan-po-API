@@ -13,14 +13,14 @@ module.exports = function (app) {
     app.route('/products/:productId')
         .get(product.findProduct);
 
-    app.route('/add-product')
+    app.route('/products')
         .post(product.createProduct);
 
-    app.route('/edit-product/:productId')
+    app.route('/products/:productId')
         .put(product.updateProduct);
 
-    app.route('/delete-product/:productId')
-        .put(product.deleteProduct);
+    app.route('/products/:productId')
+        .delete(product.deleteProduct);
 
     // - customer routes
     app.route('/customers')

@@ -35,6 +35,8 @@ npm run db:seed
 npm run dev
 ```
 
+## [API Documentation](https://documenter.getpostman.com/view/528724/RztprTSh)
+
 ## Authors
 
 **[Merlinda Sumardi](https://merlindasumardi.com)**
