@@ -14,24 +14,25 @@ Make sure you have mysql database, create new database and change the .env
 
 A step by step series of examples that tell you how to get a development env running
 
-Say what the step will be
-
+Install node_modules
 ```
 npm install
 ```
 
+Migrate Data
 ```
-npm run migration
-```
-
-```
-npm run seed
+npm run db:migrate
 ```
 
-## Deployment
+Seed Data
+```
+npm run db:seed
+```
+
+## Development
 
 ```
-nodemon app.js
+npm run dev
 ```
 
 ## Authors

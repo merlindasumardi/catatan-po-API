@@ -1,14 +1,17 @@
-const config = require('./config/app.config').getDefaultConfig();
-var express = require('express'),
-    app = express(),
-    port = config.port,
-    bodyParser = require('body-parser')
+
+const { port } = require('./config/app.config').getDefaultConfig();
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-var routes = require('./routes/v1');
+// - load routes
+const routes = require('./routes/v1');
 routes(app);
 
-app.listen(port);
-console.log('RESTful API server started on: ' + port);
+// - set port
+app.listen(port, () => {
+    console.log(`RESTFUL API server started on: ${port}`);
+});
