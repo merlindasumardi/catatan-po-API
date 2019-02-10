@@ -1,44 +1,44 @@
-
-'use strict';
-
-module.exports = function(app) {
+module.exports = function (app) {
     var product = require('../controllers/productController');
     var customer = require('../controllers/customerController');
     var order = require('../controllers/orderController');
 
+    // - product route
     app.route('/')
-    .get(product.index);
+        .get(product.index);
 
     app.route('/products')
-    .get(product.products);
+        .get(product.products);
 
     app.route('/products/:productId')
-    .get(product.findProduct);
+        .get(product.findProduct);
 
     app.route('/add-product')
-    .post(product.createProduct);
+        .post(product.createProduct);
 
     app.route('/edit-product/:productId')
-    .put(product.updateProduct);
+        .put(product.updateProduct);
 
     app.route('/delete-product/:productId')
-    .put(product.deleteProduct);
+        .put(product.deleteProduct);
 
+    // - customer routes
     app.route('/customers')
-    .get(customer.customers);
+        .get(customer.customers);
 
     app.route('/add-customer')
-    .post(customer.createCustomer);
+        .post(customer.createCustomer);
 
     app.route('/edit-customer/:customerId')
-    .put(customer.updateCustomer);
+        .put(customer.updateCustomer);
 
     app.route('/delete-customer/:customerId')
-    .put(customer.deleteCustomer);
+        .put(customer.deleteCustomer);
 
+    // - order routes
     app.route('/get-order/:customerId')
-    .get(order.getAllOrderByCustomer);
+        .get(order.getAllOrderByCustomer);
 
     app.route('/create-order')
-    .post(order.createOrder);
+        .post(order.createOrder);
 };

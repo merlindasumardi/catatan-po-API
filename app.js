@@ -1,7 +1,7 @@
-require("dotenv").config();
+const config = require('./config/app.config').getDefaultConfig();
 var express = require('express'),
     app = express(),
-    port = process.env.PORT || 3000,
+    port = config.port,
     bodyParser = require('body-parser')
 
 app.use(bodyParser.urlencoded({ extended: true }));

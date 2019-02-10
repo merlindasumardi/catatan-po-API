@@ -1,5 +1,3 @@
-'use strict';
-
 var response = require('./res');
 var connection = require('../config/con');
 const _ = require('lodash');
