@@ -1,15 +1,16 @@
 var response = require('./res');
 var connection = require('../config/con');
 const _ = require('lodash');
+const { Product, Category } = require('../models');
 
-exports.products = function(req, res) {
-    connection.query('SELECT * FROM Products', function (error, rows, fields){
-        if(error){
-            console.log(error)
-        } else{
-            response.ok(rows, res)
+exports.products = async (req, res) => {
+    const products = await Product.findAll({
+        include: {
+            model: Category,
+            as: 'category'
         }
     });
+    response.ok(products, res);
 };
 
 exports.findProduct = (req, res) => {

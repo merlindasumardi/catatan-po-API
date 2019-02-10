@@ -11,7 +11,8 @@
         "db:seed": "node_modules/.bin/sequelize db:seed:all",
         "db:undo:seed": "node_modules/.bin/sequelize db:seed:undo:all",
         "db:create": "node_modules/.bin/sequelize db:create",
-        "db:drop": "node_modules/.bin/sequelize db:drop"
+        "db:drop": "node_modules/.bin/sequelize db:drop",
+        "db:migration:generate": "node_modules/.bin/sequelize migration:generate"
     },
     "keywords": [],
     "author": "",

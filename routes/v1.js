@@ -26,19 +26,19 @@ module.exports = function (app) {
     app.route('/customers')
         .get(customer.customers);
 
-    app.route('/add-customer')
+    app.route('/customers')
         .post(customer.createCustomer);
 
-    app.route('/edit-customer/:customerId')
+    app.route('/customers/:customerId')
         .put(customer.updateCustomer);
 
-    app.route('/delete-customer/:customerId')
-        .put(customer.deleteCustomer);
+    app.route('/customers/:customerId')
+        .delete(customer.deleteCustomer);
 
     // - order routes
-    app.route('/get-order/:customerId')
+    app.route('/orders/:customerId')
         .get(order.getAllOrderByCustomer);
 
-    app.route('/create-order')
+    app.route('/orders')
         .post(order.createOrder);
 };
