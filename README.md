@@ -35,6 +35,12 @@ npm run db:seed
 npm run dev
 ```
 
+Generate Migration
+```
+npm run db:migration:generate -- --name="[migratino_file_name]" 
+Example: npm run db:migration:generate -- --name="change_weight_to_product" 
+```
+
 ## [API Documentation](https://documenter.getpostman.com/view/528724/RztprTSh)
 
 ## Authors

@@ -1,8 +1,12 @@
-'use strict';
-
 var response = require('./res');
 var connection = require('../config/con');
 const _ = require('lodash');
+const {
+    Customer,
+    Orders,
+    OrderDetails,
+    sequelize
+} = require('../models');
 
 exports.getAllOrderByCustomer = (req, res) => {
     const customerId = req.params.customerId;
@@ -19,26 +23,38 @@ exports.getAllOrderByCustomer = (req, res) => {
 }
 
 exports.createOrder = async (req, res) => {
+    const transaction = await sequelize.transaction();
+    // - get request body
     const orderData = req.body.orderData;
     const orderDetailData = req.body.orderDetail
-    
-    await connection.query('UPDATE Orders SET ? WHERE orderId=?', [orderData, orderData.orderId], (error, rows) => {
-        if(error) {
-            response.error(error, res);
-        } else{
-            console.log(rows);
-            response.ok(rows, res);
-            
+    try {
+        // - find customer_id
+        const { customerId } = orderData;
+        const customer = await Customer.findByPk(customerId, { transaction });
+        if (_.isEmpty(customer)) {
+            transaction.rollback();
+            response.error({
+                message: `customer with id ${customerId} not found!`
+            }, res);
         }
-    });
-    await connection.query('INSERT INTO OrderDetails SET ?', [orderDetailData], (error, rows) => {
-        if(error) {
-            response.error(error, res);
-        } else{
-            console.log('order detail');
-            response.ok(rows, res);
-        }
-    });
-    
+        // - create order
+        const order = await Orders.create(orderData, { transaction });
 
+        // - create order detail
+        // const willInsertData = _
+        //     .chain(orderDetailData)
+        //     .map()
+        const orderDetail = await OrderDetails.bulkCreate(orderDetailData, { transaction });
+
+        // - commit transaction
+        transaction.commit();
+        response.ok({
+            order,
+            orderDetail
+        }, res);
+    } catch (err) {
+        console.log(err);
+        transaction.rollback();
+        response.error(err, res);
+    }
 }
