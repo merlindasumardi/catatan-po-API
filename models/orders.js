@@ -1,10 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
     const Orders = sequelize.define('Orders', {
+        amountOfDP: DataTypes.INTEGER,
+        customerId: DataTypes.INTEGER,
         downPayment: {
             type: DataTypes.ENUM,
             values: ['yes', 'no']
         },
-        amountOfDP: DataTypes.INTEGER,
         paid: {
             type: DataTypes.ENUM,
             values: ['yes', 'no']

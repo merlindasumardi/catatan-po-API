@@ -41,4 +41,7 @@ module.exports = function (app) {
 
     app.route('/orders')
         .post(order.createOrder);
+    
+    app.route('/orders/:orderId')
+        .put(order.updateOrder);
 };
