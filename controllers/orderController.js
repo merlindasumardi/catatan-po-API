@@ -41,10 +41,11 @@ exports.createOrder = async (req, res) => {
         const order = await Orders.create(orderData, { transaction });
 
         // - create order detail
-        // const willInsertData = _
-        //     .chain(orderDetailData)
-        //     .map()
-        const orderDetail = await OrderDetails.bulkCreate(orderDetailData, { transaction });
+        const willInsertData = _
+            .chain(orderDetailData)
+            .map(el => _.extend({}, el, { orderId: order.id }))
+            .value();
+        const orderDetail = await OrderDetails.bulkCreate(willInsertData, { transaction });
 
         // - commit transaction
         transaction.commit();
