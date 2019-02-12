@@ -15,10 +15,16 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: 0
         }
     }, {});
-    // Order.associate = function (models) {
-    //     // Orders.belongsTo(models.Customer);
-    //     // Orders.belongsToMany(models.Products, {through: 'OrderDetails'});
-    //     // associations can be defined here
-    // };
+
+    Orders.associate = function (models) {
+        Orders.belongsTo(models.Customer, {
+            as: 'customer',
+            foreignKey: 'customerId'
+        });
+        // associations can be defined here
+        Orders.hasMany(models.OrderDetails, {
+            as: 'orderDetails'
+        })
+    };
     return Orders;
 };

@@ -6,7 +6,10 @@ module.exports = (sequelize, DataTypes) => {
         price: DataTypes.INTEGER
     }, {});
 
-    // OrderDetails.associate = function (models) {
-    // };
+    OrderDetails.associate = function (models) {
+        OrderDetails.belongsTo(models.Product, {
+            as: 'product'
+        });
+    };
     return OrderDetails;
 };

@@ -5,21 +5,40 @@ const {
     Customer,
     Orders,
     OrderDetails,
+    Product,
     sequelize
 } = require('../models');
 
-exports.getAllOrderByCustomer = (req, res) => {
-    const customerId = req.params.customerId;
-    const getOrderQuery = `SELECT *, od.id as orderDetailId
-    FROM OrderDetails od JOIN Products p ON p.id = od.id JOIN Orders o ON od.orderId = o.id
-    WHERE orderId IN  (SELECT id FROM Orders WHERE customerId=? )`;
-    connection.query(getOrderQuery, [customerId], (error, rows, fields) => {
-        if(error) {
-            response.error(error, res);
-        } else{
-            response.ok(rows, res);
-        }
-    });
+exports.getAllOrderByCustomer = async (req, res) => {
+    const transaction = await sequelize.transaction();
+    try {
+        const customerId = req.params.customerId;
+        const orders = await Orders.findAll({
+            where: {
+                customerId
+            },
+            include: {
+                model: OrderDetails,
+                as: 'orderDetails',
+                include: {
+                    model: Product,
+                    as: 'product'
+                }
+            }
+        }, { transaction });
+
+
+        await transaction.commit();
+
+        response.ok({
+            orders
+        }, res);
+    } catch (error) {
+        await transaction.rollback();
+        response.error({
+            message: error.message
+        }, res);
+    }
 }
 
 exports.createOrder = async (req, res) => {
