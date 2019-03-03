@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
             type:  DataTypes.ENUM,
             values: ['yes', 'no']
         },
-        categoryId: DataTypes.INTEGER
+        categoryId: DataTypes.INTEGER,
+        profit: DataTypes.FLOAT(16, 2)
     }, {});
 
     Product.associate = function (models) {
