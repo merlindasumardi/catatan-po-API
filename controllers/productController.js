@@ -57,16 +57,30 @@ exports.findProduct = (req, res) => {
 }
 
 exports.createProduct = (req, res) => {
-    console.log(req.body);
-    const data = req.body;
-    const queryAddProduct = 'INSERT INTO Products SET ?';
-    connection.query(queryAddProduct, [data], (error, rows) => {
-        if(error) {
-            console.log(error);
-        } else {
-            response.ok(rows, res);
-        }
-    })
+    // console.log(req.body);
+    // const data = req.body;
+    // const queryAddProduct = 'INSERT INTO Products SET ?';
+    // connection.query(queryAddProduct, [data], (error, rows) => {
+    //     if(error) {
+    //         console.log(error);
+    //     } else {
+    //         response.ok(rows, res);
+    //     }
+    // })
+    const transaction = await sequelize.transaction();
+    try {
+        // - get params
+        const data = req.body;
+        const result = await Product.create(data, { transaction });
+        await transaction.commit();
+        response.ok(result, res);
+    } catch (error) {
+        console.log(error);
+        await transaction.rollback();
+        response.error({
+            message: error
+        }, res);
+    }
 }
 
 exports.updateProduct = (req, res) => {
