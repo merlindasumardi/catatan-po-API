@@ -1,7 +1,14 @@
 module.exports = function (app) {
+    const category = require('../controllers/categoryController');
     var product = require('../controllers/productController');
     var customer = require('../controllers/customerController');
     var order = require('../controllers/orderController');
+
+    // - category route
+    app.route('/categories')
+        .get(category.list);
+    app.route('/categories/:id')
+        .get(category.get);
 
     // - product route
     app.route('/')
