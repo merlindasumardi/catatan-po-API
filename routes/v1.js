@@ -19,6 +19,9 @@ module.exports = function (app) {
 
     app.route('/products/:productId')
         .get(product.findProduct);
+    
+    app.route('/products/search/:name')
+        .get(product.search);
 
     app.route('/products')
         .post(product.createProduct);

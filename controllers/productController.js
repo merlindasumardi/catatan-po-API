@@ -1,7 +1,22 @@
 var response = require('./res');
 var connection = require('../config/con');
 const _ = require('lodash');
-const { Product, Category } = require('../models');
+const { Product, Category, sequelize } = require('../models');
+const { Op } = sequelize;
+
+// - get by product name, using like
+exports.search = async (req, res) => {
+    const { name } = req.params;
+    const product = await Product.findAll({
+        where: {
+            productName: {
+                [Op.like]: `%${name}%`
+            }   
+        }
+    });
+
+    response.ok(product, res);
+};
 
 exports.products = async (req, res) => {
     const products = await Product.findAll({
