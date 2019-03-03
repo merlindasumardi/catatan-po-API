@@ -9,6 +9,12 @@ module.exports = function (app) {
         .get(category.list);
     app.route('/categories/:id')
         .get(category.get);
+    app.route('/categories')
+        .post(category.create);
+    app.route('/categories/:id')
+        .put(category.update);
+    app.route('/categories/:id')
+        .delete(category.delete);
 
     // - product route
     app.route('/')
