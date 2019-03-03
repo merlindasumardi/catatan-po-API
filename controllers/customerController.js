@@ -1,17 +1,18 @@
-'use strict';
-
-var response = require('./res');
-var connection = require('../config/con');
+const response = require('./res');
+const connection = require('../config/con');
 const _ = require('lodash');
+const { Customer } = require('../models');
 
-exports.customers = function(req, res) {
-    connection.query('SELECT * FROM Customers', function (error, rows, fields){
-        if(error){
-            response.error(error, res)
-        } else{
-            response.ok(rows, res)
-        }
-    });
+exports.customers = async function (req, res) {
+    // connection.query('SELECT * FROM Customers', function (error, rows, fields){
+    //     if(error){
+    //         response.error(error, res)
+    //     } else{
+    //         response.ok(rows, res)
+    //     }
+    // });
+    const customers = await Customer.findAll();
+    response.ok(customers, res);
 };
 
 exports.findProduct = (req, res) => {
