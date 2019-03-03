@@ -56,7 +56,7 @@ exports.findProduct = (req, res) => {
     )
 }
 
-exports.createProduct = (req, res) => {
+exports.createProduct = async (req, res) => {
     // console.log(req.body);
     // const data = req.body;
     // const queryAddProduct = 'INSERT INTO Products SET ?';
