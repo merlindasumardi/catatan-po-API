@@ -1,7 +1,7 @@
 const response = require('./res');
 const connection = require('../config/con');
 const _ = require('lodash');
-const { Customer } = require('../models');
+const { Customer, sequelize } = require('../models');
 
 exports.customers = async function (req, res) {
     const customers = await Customer.findAll();
@@ -37,14 +37,28 @@ exports.findProduct = (req, res) => {
 }
 
 exports.createCustomer = async (req, res) => {
-    const data = req.body;
-    connection.query('INSERT INTO Customers SET ?', [data], (error, rows) => {
-        if(error) {
-            response.error(error, res)
-        } else {
-            response.ok(rows, res);
-        }
-    })
+    // const data = req.body;
+    // connection.query('INSERT INTO Customers SET ?', [data], (error, rows) => {
+    //     if(error) {
+    //         response.error(error, res)
+    //     } else {
+    //         response.ok(rows, res);
+    //     }
+    // })
+    const transaction = await sequelize.transaction();
+    try {
+        // - get params
+        const data = req.body;
+        const result = await Customer.create(data, { transaction });
+        await transaction.commit();
+        response.ok(result, res);
+    } catch (error) {
+        console.log(error);
+        await transaction.rollback();
+        response.error({
+            message: error
+        }, res);
+    }
 }
 
 exports.updateCustomer = (req, res) => {
