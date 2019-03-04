@@ -4,13 +4,6 @@ const _ = require('lodash');
 const { Customer } = require('../models');
 
 exports.customers = async function (req, res) {
-    // connection.query('SELECT * FROM Customers', function (error, rows, fields){
-    //     if(error){
-    //         response.error(error, res)
-    //     } else{
-    //         response.ok(rows, res)
-    //     }
-    // });
     const customers = await Customer.findAll();
     response.ok(customers, res);
 };
@@ -43,7 +36,7 @@ exports.findProduct = (req, res) => {
     )
 }
 
-exports.createCustomer = (req, res) => {
+exports.createCustomer = async (req, res) => {
     const data = req.body;
     connection.query('INSERT INTO Customers SET ?', [data], (error, rows) => {
         if(error) {

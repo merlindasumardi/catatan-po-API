@@ -28,45 +28,42 @@ exports.products = async (req, res) => {
     response.ok(products, res);
 };
 
-exports.findProduct = (req, res) => {
+exports.findProduct = async (req, res) => {
     const productId = req.params.productId;
-    const queryTotalCustomer = 'SELECT COUNT(orderId) as totalCustomer FROM OrderDetails WHERE productId = ?';
-    connection.query('SELECT * FROM Products WHERE id = ?',
-    [productId],
-    (error, rows, fields) => {
-        if(error) {
-            console.log(error);
-        } else {
-            if(rows.length > 0){
-              _.map(rows, (row, i) => {
-                  connection.query(queryTotalCustomer, [productId], 
-                    (error, customerRows, fields) => {
-                        if (error) {
-                            console.log(error);
-                        } else {
-                            row.totalCustomer = customerRows;
-                            console.log(row);
-                            response.ok(rows, res)
-                        }
-                    })
-              })
-            }
-        }
+    const product = await Product.findByPk(productId);
+    if (_.isEmpty(product)) {
+        response.error({
+            message: `product id: ${productId} not found!`
+        }, res);
     }
-    )
-}
-
-exports.createProduct = async (req, res) => {
-    // console.log(req.body);
-    // const data = req.body;
-    // const queryAddProduct = 'INSERT INTO Products SET ?';
-    // connection.query(queryAddProduct, [data], (error, rows) => {
+    response.ok(product, res);
+    // const queryTotalCustomer = 'SELECT COUNT(orderId) as totalCustomer FROM OrderDetails WHERE productId = ?';
+    // connection.query('SELECT * FROM Products WHERE id = ?',
+    // [productId],
+    // (error, rows, fields) => {
     //     if(error) {
     //         console.log(error);
     //     } else {
-    //         response.ok(rows, res);
+    //         if(rows.length > 0){
+    //           _.map(rows, (row, i) => {
+    //               connection.query(queryTotalCustomer, [productId], 
+    //                 (error, customerRows, fields) => {
+    //                     if (error) {
+    //                         console.log(error);
+    //                     } else {
+    //                         row.totalCustomer = customerRows;
+    //                         console.log(row);
+    //                         response.ok(rows, res)
+    //                     }
+    //                 })
+    //           })
+    //         }
     //     }
-    // })
+    // }
+    // )
+}
+
+exports.createProduct = async (req, res) => {
     const transaction = await sequelize.transaction();
     try {
         // - get params
