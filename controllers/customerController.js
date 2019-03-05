@@ -96,7 +96,7 @@ exports.deleteCustomer = async (req, res) => {
             await customer.destroy();
             await transaction.commit();
             response.ok({
-                message: `success remove customer: ${customer.id}, name: ${category.categoryName}`
+                message: `success remove customer: ${customer.id}`
             }, res);
         } catch (error) {
             console.log(error);
