@@ -73,15 +73,38 @@ exports.updateCustomer = (req, res) => {
     })
 }
 
-exports.deleteCustomer = (req, res) => {
-    const customerId = req.params.customerId;
-    connection.query('UPDATE Customers SET isActive="no" WHERE id=?', [customerId], (error, rows) => {
-        if(error) {
-            response.error(error, res);
-        } else{
-            response.ok(rows, res);
+exports.deleteCustomer = async (req, res) => {
+    // const { customerId } = req.params;
+    // connection.query('UPDATE Customers SET isActive="no" WHERE id=?', [customerId], (error, rows) => {
+    //     if(error) {
+    //         response.error(error, res);
+    //     } else{
+    //         response.ok(rows, res);
+    //     }
+    // })
+
+    const transaction = await sequelize.transaction();
+        try {
+            // - get params
+            const { customerId } = req.params;
+            const customer = await Customer.findByPk(customerId);
+            if (_.isEmpty(customer)) {
+                response.error({
+                    message: `customer id: ${id} not found!`
+                }, res);
+            }
+            await customer.destroy();
+            await transaction.commit();
+            response.ok({
+                message: `success remove customer: ${customer.id}, name: ${category.categoryName}`
+            }, res);
+        } catch (error) {
+            console.log(error);
+            await transaction.rollback();
+            response.error({
+                message: error
+            }, res);
         }
-    })
 }
 
 exports.index = function(req, res) {
